@@ -20,15 +20,42 @@ const smtpServer = process.env.EMAIL_SERVER;
  */
 export const EMAIL_PROVIDER_ID = smtpServer ? "nodemailer" : "resend";
 
+type EmailProvider = ReturnType<typeof Nodemailer> | ReturnType<typeof Resend>;
+
+/**
+ * Point the emailed link at /verify-signin instead of the one-time callback.
+ * Browsers and mail clients prefetch links (address-bar preloading, link
+ * previews), which consumes the token before the real click. The confirm page
+ * only reaches the callback when the user presses its button.
+ */
+function withConfirmPage<P extends EmailProvider>(provider: P): P {
+  const send = provider.sendVerificationRequest;
+  return {
+    ...provider,
+    options: {
+      ...provider.options,
+      sendVerificationRequest: (params: Parameters<typeof send>[0]) => {
+        const callback = new URL(params.url);
+        const confirm = new URL("/verify-signin", callback.origin);
+        confirm.search = callback.search;
+        confirm.searchParams.set("provider", provider.id);
+        return send({ ...params, url: confirm.toString() });
+      },
+    },
+  };
+}
+
 export const authConfig = {
   adapter: PrismaAdapter(prisma as unknown as AdapterPrismaClient),
   providers: [
     smtpServer
-      ? Nodemailer({ server: smtpServer, from: emailFrom })
-      : Resend({
-          apiKey: process.env.RESEND_API_KEY ?? "missing-resend-api-key",
-          from: emailFrom,
-        }),
+      ? withConfirmPage(Nodemailer({ server: smtpServer, from: emailFrom }))
+      : withConfirmPage(
+          Resend({
+            apiKey: process.env.RESEND_API_KEY ?? "missing-resend-api-key",
+            from: emailFrom,
+          })
+        ),
   ],
   callbacks: {
     // Runs before the magic link is sent, so a blocked address never receives
