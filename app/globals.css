@@ -3,25 +3,59 @@
 /* ManyChat Alternative — Design System
    Plain and functional. No gradients, glass, glow, or animation. */
 
-@theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #18181b;
-  --color-surface: #f7f7f8;
-  --color-surface-hover: #efeff1;
-  --color-border: #e4e4e7;
-  --color-border-hover: #d4d4d8;
-  --color-muted: #71717a;
-  --color-accent: #f97316;
-  --color-accent-hover: #ea580c;
-  --color-success: #16a34a;
-  --color-error: #dc2626;
-  --color-warning: #d97706;
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, monospace;
+/* Palette follows the operating system: light by default, dark when the
+   device is in dark mode. Utilities read these through the @theme tokens. */
+:root {
+  --or-background: #ffffff;
+  --or-foreground: #18181b;
+  --or-surface: #f7f7f8;
+  --or-surface-hover: #efeff1;
+  --or-border: #e4e4e7;
+  --or-border-hover: #d4d4d8;
+  --or-muted: #71717a;
+  --or-accent: #f97316;
+  --or-accent-hover: #ea580c;
+  --or-success: #16a34a;
+  --or-error: #dc2626;
+  --or-warning: #d97706;
+  --or-chart-surface: #ffffff;
+  color-scheme: light;
 }
 
-html {
-  color-scheme: light;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --or-background: #0f0f11;
+    --or-foreground: #f4f4f5;
+    --or-surface: #18181b;
+    --or-surface-hover: #232327;
+    --or-border: #2e2e33;
+    --or-border-hover: #3f3f46;
+    --or-muted: #a1a1aa;
+    --or-accent: #f97316;
+    --or-accent-hover: #fb923c;
+    --or-success: #22c55e;
+    --or-error: #f87171;
+    --or-warning: #fbbf24;
+    --or-chart-surface: #18181b;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-background: var(--or-background);
+  --color-foreground: var(--or-foreground);
+  --color-surface: var(--or-surface);
+  --color-surface-hover: var(--or-surface-hover);
+  --color-border: var(--or-border);
+  --color-border-hover: var(--or-border-hover);
+  --color-muted: var(--or-muted);
+  --color-accent: var(--or-accent);
+  --color-accent-hover: var(--or-accent-hover);
+  --color-success: var(--or-success);
+  --color-error: var(--or-error);
+  --color-warning: var(--or-warning);
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, monospace;
 }
 
 body {

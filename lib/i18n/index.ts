@@ -1,11 +1,17 @@
+import it from "./it.json";
 import zhTW from "./zh-TW.json";
 
 export const LOCALE_COOKIE = "openreply-locale";
-export type Locale = "en" | "zh-TW";
+export type Locale = "en" | "zh-TW" | "it";
 export type MessageKey = keyof typeof zhTW;
 
+const catalogs: Record<Exclude<Locale, "en">, Record<MessageKey, string>> = {
+  "zh-TW": zhTW,
+  it,
+};
+
 export function isLocale(value: unknown): value is Locale {
-  return value === "en" || value === "zh-TW";
+  return value === "en" || value === "zh-TW" || value === "it";
 }
 
 export function resolveLocale(value: unknown): Locale {
@@ -53,7 +59,7 @@ const labels: Record<string, StaticMessageKey> = {
 
 export function createI18n(locale: Locale) {
   function t<K extends MessageKey>(key: K, ...args: MessageArgs<K>): string {
-    const message = locale === "zh-TW" ? zhTW[key] : key;
+    const message = locale === "en" ? key : catalogs[locale][key];
     const values = args[0] as Record<string, string | number> | undefined;
     return message.replace(/\{(\w+)\}/g, (placeholder, name: string) =>
       values?.[name] === undefined ? placeholder : String(values[name]),

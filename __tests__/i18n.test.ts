@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createI18n, resolveLocale } from "../lib/i18n";
+import italian from "../lib/i18n/it.json";
 import zhTW from "../lib/i18n/zh-TW.json";
 
 describe("interface translations", () => {
@@ -8,6 +9,14 @@ describe("interface translations", () => {
       expect(resolveLocale(value)).toBe("en");
     }
     expect(resolveLocale("zh-TW")).toBe("zh-TW");
+    expect(resolveLocale("it")).toBe("it");
+  });
+
+  it("renders Italian from the same keys", () => {
+    expect(createI18n("it").t("Campaigns")).toBe("Campagne");
+    expect(createI18n("it").t("{count} campaigns", { count: 3 })).toBe(
+      "3 campagne",
+    );
   });
 
   it("renders both interface languages from the same keys", () => {
@@ -49,7 +58,11 @@ describe("interface translations", () => {
   it("has complete, plain-text translations with matching interpolation fields", () => {
     const placeholders = (text: string) =>
       [...text.matchAll(/\{(\w+)\}/g)].map((match) => match[1]).sort();
-    for (const [source, translation] of Object.entries(zhTW)) {
+    expect(Object.keys(italian).sort()).toEqual(Object.keys(zhTW).sort());
+    for (const [source, translation] of [
+      ...Object.entries(zhTW),
+      ...Object.entries(italian),
+    ]) {
       expect(translation.trim(), source).not.toBe("");
       expect(placeholders(translation), source).toEqual(placeholders(source));
       expect(source, source).not.toMatch(/&(?:[a-z]+|#\d+);/i);

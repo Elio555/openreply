@@ -1,6 +1,6 @@
 # Interface languages
 
-OpenReply defaults to English. Choose **English** or **繁體中文** in the dashboard
+OpenReply defaults to English. Choose **English**, **Italiano** or **繁體中文** in the dashboard
 sidebar, under **Settings → Interface language**, or on the sign-in screen.
 The choice is stored in a browser cookie for one year and applies to the
 dashboard, sign-in screens, workspace invitations, and shared campaign reports.
@@ -16,6 +16,8 @@ interface translation's scope.
 
 ## Adding or changing copy
 
+- `lib/i18n/it.json` maps English source copy to Italian and must have the
+  same keys as `zh-TW.json`.
 - `lib/i18n/zh-TW.json` maps English source copy to Traditional Chinese. Use
   complete sentences with named placeholders when word order can vary.
 - Client components use `useI18n()`; server components use `await getI18n()`.
