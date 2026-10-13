@@ -5,6 +5,9 @@ interface LegalShellProps {
   title: string;
   description: string;
   updatedAt: string;
+  updatedLabel?: string;
+  signInLabel?: string;
+  lang?: string;
   children: React.ReactNode;
 }
 
@@ -12,10 +15,13 @@ export default function LegalShell({
   title,
   description,
   updatedAt,
+  updatedLabel = "Last updated",
+  signInLabel = "Sign in",
+  lang,
   children,
 }: LegalShellProps) {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main lang={lang} className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5">
           <Link href="/" className="flex items-center gap-3">
@@ -25,14 +31,14 @@ export default function LegalShell({
             href="/login"
             className="text-sm font-semibold text-muted transition hover:text-foreground"
           >
-            Sign in
+            {signInLabel}
           </Link>
         </div>
       </header>
 
       <article className="mx-auto max-w-3xl px-5 py-14">
         <p className="text-sm font-semibold uppercase text-accent">
-          Last updated {updatedAt}
+          {updatedLabel} {updatedAt}
         </p>
         <h1 className="mt-4 text-4xl font-black text-foreground sm:text-5xl">
           {title}
