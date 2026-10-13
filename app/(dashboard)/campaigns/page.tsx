@@ -145,9 +145,21 @@ export default function CampaignsPage() {
     }
     /* eslint-enable react-hooks/set-state-in-effect */
 
+    // Look each campaign's post up by id, so campaigns on older posts (beyond
+    // the most recent page) get a thumbnail too.
     Promise.all(
-      accountIds.map((accountId) =>
-        fetch(`/api/instagram/posts?instagramAccountId=${accountId}&limit=50`)
+      accountIds.map((accountId) => {
+        const ids = Array.from(
+          new Set(
+            automations
+              .filter((a) => a.instagramAccountId === accountId && a.postId)
+              .map((a) => a.postId as string)
+          )
+        );
+        if (ids.length === 0) return Promise.resolve([]);
+        return fetch(
+          `/api/instagram/media?instagramAccountId=${accountId}&ids=${ids.join(",")}`
+        )
           .then((res) => res.json())
           .then((payload) =>
             payload.success
@@ -159,8 +171,8 @@ export default function CampaignsPage() {
                 }[])
               : []
           )
-          .catch(() => [])
-      )
+          .catch(() => []);
+      })
     ).then((lists) => {
       if (cancelled) return;
       const thumbs: Record<string, string> = {};
@@ -391,7 +403,7 @@ export default function CampaignsPage() {
                     <img
                       src={thumbnails[auto.postId]}
                       alt={t("Campaign reel")}
-                      className="w-12 h-12 rounded object-cover border border-border hover:border-border-hover"
+                      className="w-14 h-14 rounded object-cover border border-border hover:border-border-hover"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                       }}
@@ -409,13 +421,20 @@ export default function CampaignsPage() {
                     <img
                       src={thumbnails[auto.postId]}
                       alt={t("Campaign post")}
-                      className="w-12 h-12 rounded object-cover border border-border"
+                      className="w-14 h-14 rounded object-cover border border-border"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                       }}
                     />
                   </a>
                 )
+              )}
+              {!(auto.postId && thumbnails[auto.postId]) && (
+                // Same placeholder as the campaign detail page while the
+                // thumbnail loads, or when there is none to show.
+                <div className="grid h-14 w-14 shrink-0 place-items-center rounded bg-surface-hover text-[10px] text-muted">
+                  {auto.matchAnyPost || auto.pendingNextReel ? "Any" : t("Post")}
+                </div>
               )}
               <div className="min-w-[12rem] flex-1">
                 <div className="flex flex-wrap items-center gap-2 mb-2">

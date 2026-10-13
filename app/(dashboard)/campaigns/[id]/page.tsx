@@ -95,7 +95,9 @@ export default function CampaignDetailPage() {
       .catch(() => setAvatarUrl(null));
 
     if (campaign.postId) {
-      fetch(`/api/instagram/posts?instagramAccountId=${acct}&limit=50`)
+      fetch(
+        `/api/instagram/media?instagramAccountId=${acct}&ids=${campaign.postId}`
+      )
         .then((r) => r.json())
         .then((payload) => {
           if (!payload.success) return;
