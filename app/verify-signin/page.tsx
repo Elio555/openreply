@@ -1,5 +1,6 @@
 import { getI18n } from "@/lib/i18n/server";
 import Link from "next/link";
+import BrandLogo from "@/components/brand-logo";
 
 export async function generateMetadata() {
   const { t } = await getI18n();
@@ -32,7 +33,9 @@ export default async function VerifySignInPage({
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-foreground">OpenReply</h1>
+          <h1 className="text-2xl">
+            <BrandLogo size={32} />
+          </h1>
         </div>
 
         <div className="panel rounded p-8 text-center">

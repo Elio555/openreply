@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "../brand";
 import italianCatalog from "./it.json";
 import ptBRCatalog from "./pt-BR.json";
 import zhTW from "./zh-TW.json";
@@ -67,7 +68,10 @@ const labels: Record<string, StaticMessageKey> = {
 
 export function createI18n(locale: Locale) {
   function t<K extends MessageKey>(key: K, ...args: MessageArgs<K>): string {
-    const message = locale === "en" ? key : catalogs[locale][key];
+    const message = (locale === "en" ? key : catalogs[locale][key]).replaceAll(
+      "OpenReply",
+      BRAND_NAME,
+    );
     const values = args[0] as Record<string, string | number> | undefined;
     return message.replace(/\{(\w+)\}/g, (placeholder, name: string) =>
       values?.[name] === undefined ? placeholder : String(values[name]),

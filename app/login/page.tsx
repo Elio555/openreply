@@ -3,6 +3,7 @@ import { getI18n } from "@/lib/i18n/server";
 import { getCampaignTemplate } from "@/lib/templates/campaign-templates";
 import { DemoNotice } from "@/components/demo-notice";
 import { isPublicDemoHost } from "@/lib/env";
+import BrandLogo from "@/components/brand-logo";
 
 const GITHUB_URL = "https://github.com/diwenne/openreply";
 const SETUP_DOCS_URL = `${GITHUB_URL}/blob/main/docs/setup.md`;
@@ -29,8 +30,8 @@ export default async function LoginPage({
     return (
       <div className="min-h-screen flex items-center justify-center px-6">
         <div className="w-full max-w-md text-center">
-          <h1 className="text-2xl font-semibold text-foreground">
-            OpenReply
+          <h1 className="text-2xl">
+            <BrandLogo size={32} />
           </h1>
           <div className="panel rounded p-8 mt-8 shadow-black/40">
             <h2 className="text-lg font-semibold text-foreground">
@@ -73,8 +74,8 @@ export default async function LoginPage({
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-foreground">
-            OpenReply
+          <h1 className="text-2xl">
+            <BrandLogo size={32} />
           </h1>
           <p className="text-muted text-sm leading-relaxed mt-2">
             {selectedTemplate

@@ -9,6 +9,7 @@
 import LanguageSwitcher from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n/provider";
 import Link from "next/link";
+import BrandLogo from "@/components/brand-logo";
 import Image from "next/image";
 import { zernioLink } from "@/lib/zernio-links";
 import { usePathname } from "next/navigation";
@@ -61,8 +62,8 @@ export default function Sidebar({
           className="px-6 py-5 border-b border-border"
           style={{ paddingTop: "calc(1.25rem + env(safe-area-inset-top))" }}
         >
-          <Link href="/dashboard" className="text-base font-semibold">
-            OpenReply
+          <Link href="/dashboard" className="text-base">
+            <BrandLogo />
           </Link>
         </div>
 
