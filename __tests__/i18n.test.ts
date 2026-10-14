@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createI18n, resolveLocale } from "../lib/i18n";
 import italian from "../lib/i18n/it.json";
 import ptBR from "../lib/i18n/pt-BR.json";
+import russian from "../lib/i18n/ru.json";
 import zhTW from "../lib/i18n/zh-TW.json";
 
 describe("interface translations", () => {
@@ -12,6 +13,7 @@ describe("interface translations", () => {
     expect(resolveLocale("zh-TW")).toBe("zh-TW");
     expect(resolveLocale("pt-BR")).toBe("pt-BR");
     expect(resolveLocale("it")).toBe("it");
+    expect(resolveLocale("ru")).toBe("ru");
   });
 
   it("renders Italian from the same keys", () => {
@@ -61,7 +63,8 @@ describe("interface translations", () => {
     const placeholders = (text: string) =>
       [...text.matchAll(/\{(\w+)\}/g)].map((match) => match[1]).sort();
     expect(Object.keys(italian).sort()).toEqual(Object.keys(zhTW).sort());
-    for (const catalog of [zhTW, ptBR, italian]) {
+    expect(Object.keys(russian).sort()).toEqual(Object.keys(zhTW).sort());
+    for (const catalog of [zhTW, ptBR, italian, russian]) {
       for (const [source, translation] of Object.entries(catalog)) {
         expect(translation.trim(), source).not.toBe("");
         expect(placeholders(translation), source).toEqual(placeholders(source));
