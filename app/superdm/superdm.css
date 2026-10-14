@@ -1,0 +1,134 @@
+/* SuperDM landing — always dark, whatever the OS theme. Overriding the theme
+   tokens on the wrapper re-skins every Tailwind utility inside it. */
+.sd {
+  --or-background: #09090b;
+  --or-foreground: #f4f4f5;
+  --or-surface: #131316;
+  --or-surface-hover: #1c1c21;
+  --or-border: #26262c;
+  --or-border-hover: #3a3a42;
+  --or-muted: #a1a1aa;
+  --or-accent: #f97316;
+  --or-accent-hover: #fb923c;
+  color-scheme: dark;
+  background: var(--or-background);
+  color: var(--or-foreground);
+  font-family: system-ui, -apple-system, "SF Pro Text", "Segoe UI", sans-serif;
+}
+
+/* Display type: tight leading and negative tracking that grows with size. */
+.sd-display {
+  font-size: clamp(2.6rem, 7vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+.sd-h2 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+/* Translucent nav: content scrolls under a blurred material, no hard divider. */
+.sd-nav {
+  background: rgba(9, 9, 11, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* One soft accent glow behind the hero; static, no looping motion. */
+.sd-glow {
+  background: radial-gradient(
+    60% 50% at 50% 0%,
+    rgba(249, 115, 22, 0.18),
+    transparent 70%
+  );
+}
+
+/* Press feedback lives on pointer-down. */
+.sd-press {
+  transition: transform 120ms ease-out, background-color 150ms ease,
+    border-color 150ms ease;
+}
+.sd-press:active {
+  transform: scale(0.97);
+}
+
+/* Phone demo: comment, public reply, then the DM arrive in sequence once. */
+.sd-step {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: sd-in 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.sd-step-1 { animation-delay: 300ms; }
+.sd-step-2 { animation-delay: 1100ms; }
+.sd-step-3 { animation-delay: 1900ms; }
+.sd-step-4 { animation-delay: 2600ms; }
+
+@keyframes sd-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sections fade up once as they enter (class added by a tiny observer). */
+.sd-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sd-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.sd details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.sd details > summary::-webkit-details-marker {
+  display: none;
+}
+.sd details[open] .sd-chevron {
+  transform: rotate(45deg);
+}
+.sd-chevron {
+  transition: transform 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-step,
+  .sd-reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sd-nav {
+    background: #09090b;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Phones: the language select stays, its label goes, so Log in fits. */
+@media (max-width: 640px) {
+  .sd-lang label > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .sd-lang select {
+    max-width: 6.5rem;
+  }
+}
